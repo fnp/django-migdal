@@ -2,13 +2,14 @@
 # This file is part of PrawoKultury, licensed under GNU Affero GPLv3 or later.
 # Copyright © Fundacja Nowoczesna Polska. See NOTICE for more information.
 #
+from django.contrib.sites.models import Site
+from django.core.mail import mail_managers
 from django import forms
+from django import template
 from django.utils.translation import ugettext_lazy as _, get_language
+from fnpdjango.utils.text.slughifi import slughifi
 from migdal.models import Entry
 from migdal import app_settings
-from fnpdjango.utils.text import slughifi
-from django.core.mail import mail_managers
-from django import template
 
 
 def get_submit_form(*args, **kwargs):
@@ -56,6 +57,9 @@ def get_submit_form(*args, **kwargs):
             mail_managers(u"Nowy wpis",
                 template.loader.get_template(
                     'migdal/mail/manager_new_entry.txt').render(
-                        template.Context({'object': entry})))
+                        template.Context({
+                            'object': entry,
+                            'site': Site.objects.get_current(),
+                        })))
 
     return SubmitForm(*args, **kwargs)

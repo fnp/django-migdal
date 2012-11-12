@@ -6,7 +6,7 @@
 {% block "titleextra" %}{{ entry.title }} :: {% endblock %}
 {% block "ogtitle" %}{{ entry.title }}{% endblock %}
 {% block "ogtype" %}article{% endblock %}
-{% block "ogdescription"%}{{ entry.lead|striptags|truncatewords:10 }}{% endblock %}
+{% block "ogdescription"%}{{ entry.lead|striptags|truncatewords:16 }}{% endblock %}
 {% block "ogimage" %}{% spaceless %}
 {% if entry.image %}
     {{ entry.image.url|build_absolute_uri:request }}

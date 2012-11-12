@@ -19,7 +19,7 @@ class AttachmentInline(admin.TabularInline):
 def filtered_entry_admin(typ):
     class EntryAdmin(admin.ModelAdmin):
         def queryset(self, request):
-            return self.model.objects.filter(type=typ)
+            return self.model.objects.filter(type=typ.db)
 
         def has_add_permission(self, request):
             return request.user.has_perm('migdal.add_entry')
@@ -29,6 +29,12 @@ def filtered_entry_admin(typ):
 
         def has_delete_permission(self, request, obj=None):
             return request.user.has_perm('migdal.delete_entry')
+
+        def formfield_for_dbfield(self, db_field, **kwargs):
+            field = super(EntryAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+            if db_field.name == 'categories':
+                field.widget.attrs['style'] = 'height: 10em'
+            return field
 
         date_hierarchy = 'date'
         readonly_fields = ('date', 'changed_at') + \
