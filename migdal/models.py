@@ -2,18 +2,20 @@
 # This file is part of PrawoKultury, licensed under GNU Affero GPLv3 or later.
 # Copyright © Fundacja Nowoczesna Polska. See NOTICE for more information.
 #
+import re
 from datetime import datetime
 from django.conf import settings
+from django.contrib.comments.signals import comment_will_be_posted
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
+from django.core.mail import mail_managers, send_mail
 from django.db import models
 from django.template import loader, Context
 from django.utils.translation import get_language, ugettext_lazy as _, ugettext
 from django_comments_xtd.models import XtdComment
 from markupfield.fields import MarkupField
-from migdal import app_settings
 from fnpdjango.utils.models.translation import add_translatable
+from migdal import app_settings
 from migdal.fields import SlugNullField
 
 class Category(models.Model):
@@ -143,3 +145,18 @@ def notify_new_comment(sender, instance, created, **kwargs):
             [instance.content_object.author_email]
         )
 models.signals.post_save.connect(notify_new_comment, sender=XtdComment)
+
+
+def spamfilter(sender, comment, **kwargs):
+    """Very simple spam filter. Just don't let any HTML links go through."""
+    if re.search(r"<a\s+href=", comment.comment):
+        fields = (comment.user, comment.user_name, comment.user_email,
+            comment.user_url, comment.submit_date, comment.ip_address,
+            comment.followup, comment.comment)
+        mail_managers(u"Spam filter report",
+            (u"""This comment was turned down as SPAM: \n""" +
+            """\n%s""" * len(fields) +
+            """\n\nYou don't have to do anything.""") % fields)
+        return False
+    return True
+comment_will_be_posted.connect(spamfilter)
