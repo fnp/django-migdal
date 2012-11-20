@@ -34,7 +34,7 @@ def get_submit_form(*args, **kwargs):
         def clean(self):
             data = super(SubmitForm, self).clean()
             data['type'] = app_settings.TYPE_SUBMIT
-            orig_slug = slughifi(data.get('title_%s' % lang, ''))
+            orig_slug = slughifi(data.get('title_%s' % lang, ''))[:47]
             slug = orig_slug
             number = 2
             while Entry.objects.filter(**{'slug_%s' % lang: slug}).exists():
