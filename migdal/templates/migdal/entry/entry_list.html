@@ -45,6 +45,9 @@
     </p>
 {% endif %}
 
+{% if not object_list %}
+   <p class="warning">{% trans "Work in progress." %}</p>
+{% endif %}
 
 {% autopaginate object_list 10 %}
 {% for object in object_list %}

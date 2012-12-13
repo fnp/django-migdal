@@ -37,14 +37,15 @@ def filtered_entry_admin(typ):
             return field
 
         date_hierarchy = 'date'
-        readonly_fields = ('date', 'changed_at') + \
+        readonly_fields = ('date', 'changed_at', 'first_published_at') + \
             translated_fields(('published_at',))
         _promo_if_necessary = ('promo',) if typ.promotable else ()
 
         fieldsets = (
             (None, {
                 'fields': _promo_if_necessary + (
-                    'author', 'author_email', 'image', 'date', 'changed_at')
+                    'in_stream', 'author', 'author_email', 'image',
+                    'date', 'first_published_at', 'changed_at')
                 }),
         ) + tuple(
             (ln, {'fields': (
@@ -81,6 +82,7 @@ def filtered_entry_admin(typ):
                             app_settings.OBLIGATORY_LANGUAGES) + \
                 ('date', 'author') + \
                 _promo_if_necessary + \
+                ('in_stream', 'first_published_at',) + \
                 translated_fields(('published_at',)) + \
                 translated_fields(('needed',), app_settings.OPTIONAL_LANGUAGES)
         list_filter = _promo_if_necessary + \

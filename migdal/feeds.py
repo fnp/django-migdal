@@ -42,13 +42,12 @@ class EntriesFeed(Feed):
         return reverse('migdal_main')
 
     def items(self, obj):
-        return api.entry_list(**obj)
+        return api.entry_list(for_feed=True, **obj)
 
     def item_title(self, item):
         return item.title
 
     def item_description(self, item):
-        return item.lead
         image = item.image.url if item.image else "/static/img/square-logo.png"
         return string_concat("<img src='%s'/>" % image, item.lead)
 
