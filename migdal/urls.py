@@ -2,6 +2,7 @@
 # This file is part of PrawoKultury, licensed under GNU Affero GPLv3 or later.
 # Copyright © Fundacja Nowoczesna Polska. See NOTICE for more information.
 #
+from django.conf import settings
 from django.conf.urls import patterns, include, url, handler404
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import string_concat
@@ -42,3 +43,13 @@ urlpatterns = i18n_patterns('',
     # type-specific views
     *pats
 )
+
+
+if 'django.contrib.sitemaps' in settings.INSTALLED_APPS:
+    from .sitemap import sitemaps
+    urlpatterns += patterns('',
+        url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {
+            'sitemaps': sitemaps
+        }),
+    )
+
