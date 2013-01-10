@@ -105,6 +105,12 @@ class Entry(models.Model):
             mail_text, settings.SERVER_EMAIL, [self.author_email]
         )
 
+    def inline_html(self):
+        for att in self.attachment_set.all():
+            if att.file.name.endswith(".html"):
+                with open(att.file.path) as f:
+                    yield f.read()
+
 
 add_translatable(Entry, languages=app_settings.OPTIONAL_LANGUAGES, fields={
     'needed': models.CharField(_('needed'), max_length=1, db_index=True, choices=(

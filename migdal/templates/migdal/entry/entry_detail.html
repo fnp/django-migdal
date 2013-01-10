@@ -28,6 +28,13 @@
 {% entry_begin entry 1 %}
 <div class="body">
 {{ entry.body }}
+
+{% for inline_html in entry.inline_html %}
+<div class="inline_html">
+    {{ inline_html|safe }}
+</div>
+{% endfor %}
+
 </div>
 
 <div style="clear: both;"></div>

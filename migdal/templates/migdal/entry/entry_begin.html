@@ -22,11 +22,12 @@
 </div>
 
 {% if object.image %}
+  <a href="{{ object.image.url }}">
     <img class="entry-picture" src="{% thumbnail object.image "200x150" as thumb %}
                     {{ thumb.url }}
                 {% empty %}
                     {{ object.image.url }}
-                {% endthumbnail %}" />
+                {% endthumbnail %}" /></a>
 {% endif %}
 <div class="lead">
 {{ object.lead }}

@@ -27,7 +27,8 @@ class Migration(SchemaMigration):
                 else:
                     entry.first_published_at = (
                         entry.published_at_en or entry.published_at_pl)
-                entry.save()
+                orm.Entry.objects.filter(pk=entry.pk).update(
+                    first_published_at=entry.first_published_at)
 
     def backwards(self, orm):
         # Deleting field 'Entry.in_stream'
