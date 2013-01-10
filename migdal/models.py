@@ -14,7 +14,7 @@ from django.template import loader, Context
 from django.utils.translation import get_language, ugettext_lazy as _, ugettext
 from django_comments_xtd.models import XtdComment
 from markupfield.fields import MarkupField
-from fnpdjango.utils.models.translation import add_translatable
+from fnpdjango.utils.models.translation import add_translatable, tQ
 from migdal import app_settings
 from migdal.fields import SlugNullField
 
@@ -40,6 +40,12 @@ add_translatable(Category, {
 })
 
 
+class PublishedEntryManager(models.Manager):
+    def get_query_set(self):
+        return super(PublishedEntryManager, self).get_query_set().filter(
+                tQ(published=True)
+            )
+
 class Entry(models.Model):
     type = models.CharField(max_length=16,
             choices=((t.db, t.slug) for t in app_settings.TYPES),
@@ -54,6 +60,9 @@ class Entry(models.Model):
     in_stream = models.BooleanField(_('in stream'), default=True)
     categories = models.ManyToManyField(Category, null=True, blank=True, verbose_name=_('categories'))
     first_published_at = models.DateTimeField(_('published at'), null=True, blank=True)
+
+    objects = models.Manager()
+    published_objects = PublishedEntryManager()
 
     class Meta:
         verbose_name = _('entry')
