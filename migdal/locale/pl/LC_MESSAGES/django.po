@@ -107,6 +107,10 @@ msgid "promoted"
 msgstr "promowane"
 
 #: models.py:55
+#: models.py:63
+msgid "canonical link"
+msgstr "link kanoniczny"
+
 msgid "entry"
 msgstr "wpis"
 

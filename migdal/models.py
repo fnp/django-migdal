@@ -60,6 +60,7 @@ class Entry(models.Model):
     in_stream = models.BooleanField(_('in stream'), default=True)
     categories = models.ManyToManyField(Category, null=True, blank=True, verbose_name=_('categories'))
     first_published_at = models.DateTimeField(_('published at'), null=True, blank=True)
+    canonical_url = models.URLField(_('canonical link'), null = True, blank = True)
 
     objects = models.Manager()
     published_objects = PublishedEntryManager()

@@ -44,7 +44,7 @@ def filtered_entry_admin(typ):
         fieldsets = (
             (None, {
                 'fields': _promo_if_necessary + (
-                    'in_stream', 'author', 'author_email', 'image',
+                    'in_stream', 'author', 'author_email', 'canonical_url', 'image',
                     'date', 'first_published_at', 'changed_at')
                 }),
         ) + tuple(

@@ -15,6 +15,10 @@
 {% endif %}
 {% endspaceless %}{% endblock %}
 
+{% block "headextra" %}
+    {% if entry.canonical_url %}<link rel="canonical" href="{{ entry.canonical_url }}"/>{% endif %}
+{% endblock %}
+
 
 {% block "body" %}
 
