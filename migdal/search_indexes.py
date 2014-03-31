@@ -5,7 +5,7 @@ from fnpdjango.utils.models.translation import add_translatable_index, localize_
 from migdal.models import Entry
 
 
-class EntryIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
+class EntryIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(null=True,
         model_attr=localize_field('body', settings.LANGUAGE_CODE),
         document=True)
