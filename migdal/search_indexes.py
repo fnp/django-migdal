@@ -19,10 +19,6 @@ class EntryIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return Entry
 
-    def index_queryset(self, using=None):
-        """Used when the entire index for model is updated."""
-        return self.get_model().objects.all()
-
 
 add_translatable_index(EntryIndex, {
     'title': indexes.CharField(null=True),
