@@ -22,7 +22,7 @@
     <div class="comments">
 
     <div class="comment preview">
-        <img class="avatar" src="{% gravatar_for_email form.email.value 64 %}" alt="Avatar"/>
+        <img class="avatar" src="{% gravatar_url form.email.value 64 %}" alt="Avatar"/>
         <div class="comment-data">
         <div class="comment-author">{{ form.name.value }}</div>
         </div>

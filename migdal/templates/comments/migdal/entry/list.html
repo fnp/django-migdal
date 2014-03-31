@@ -6,7 +6,7 @@
 <div class="comments">
   {% for comment in comment_list %}
     <div class="comment" id="c{{ comment.id }}">
-        <img class="avatar" src="{% gravatar_for_email comment.email 64 %}" alt="Avatar"/>
+        <img class="avatar" src="{% gravatar_url comment.email 64 %}" alt="Avatar"/>
         <div class="comment-data">
         <div class="comment-author">
             {% if comment.url %}
