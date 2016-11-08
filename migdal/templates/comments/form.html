@@ -12,7 +12,7 @@
   {% for field in form %}
     {% if not field.is_hidden %}
       <tr
-        {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+        {% if field.name = "honeypot" %} style="display:none;"{% endif %}>
         <th>{{ field.label_tag }}
       </th><td>
         {% if field.errors %}<p class="error">{{ field.errors }}</p>{% endif %}

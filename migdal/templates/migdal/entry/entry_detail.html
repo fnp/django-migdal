@@ -3,11 +3,11 @@
 {% load fnp_common migdal_tags fnp_share %}
 
 
-{% block "titleextra" %}{{ entry.title }} :: {% endblock %}
-{% block "ogtitle" %}{{ entry.title }}{% endblock %}
-{% block "ogtype" %}article{% endblock %}
-{% block "ogdescription"%}{{ entry.lead|striptags|truncatewords:16 }}{% endblock %}
-{% block "ogimage" %}{% spaceless %}
+{% block titleextra %}{{ entry.title }} :: {% endblock %}
+{% block ogtitle %}{{ entry.title }}{% endblock %}
+{% block ogtype %}article{% endblock %}
+{% block ogdescription %}{{ entry.lead|striptags|truncatewords:16 }}{% endblock %}
+{% block ogimage %}{% spaceless %}
 {% if entry.image %}
     {{ entry.image.url|build_absolute_uri:request }}
 {% else %}
@@ -15,12 +15,12 @@
 {% endif %}
 {% endspaceless %}{% endblock %}
 
-{% block "headextra" %}
+{% block headextra %}
     {% if entry.canonical_url %}<link rel="canonical" href="{{ entry.canonical_url }}"/>{% endif %}
 {% endblock %}
 
 
-{% block "body" %}
+{% block body %}
 
 {% if not entry.published %}
     <p class="warning">{% trans "This entry hasn't been published yet." %}</p>
