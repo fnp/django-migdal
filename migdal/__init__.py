@@ -27,26 +27,24 @@ class Settings(AppSettings):
 
     MAIN_PAGE_ENTRY = None
 
-    TYPES_DICT = None
     def _more_TYPES_DICT(self, value):
         return dict((t.db, t) for t in self.TYPES)
+    TYPES_DICT = None
 
-    TYPES_ON_MAIN = None
     def _more_TYPES_ON_MAIN(self, value):
         return tuple(t.db for t in self.TYPES if t.on_main)
+    TYPES_ON_MAIN = None
 
-    TYPES_PROMOTABLE = None
     def _more_TYPES_PROMOTABLE(self, value):
         return tuple(t.db for t in self.TYPES if t.promotable)
+    TYPES_PROMOTABLE = None
 
-    OBLIGATORY_LANGUAGES = None
     def _more_OBLIGATORY_LANGUAGES(self, value):
-        return value or tuple(lang for lang in settings.LANGUAGES
-                        if lang[0] == settings.LANGUAGE_CODE)
+        return value or tuple(lang for lang in settings.LANGUAGES if lang[0] == settings.LANGUAGE_CODE)
+    OBLIGATORY_LANGUAGES = None
 
-    OPTIONAL_LANGUAGES = None
     def _more_OPTIONAL_LANGUAGES(self, value):
-        return tuple(lang for lang in settings.LANGUAGES
-                        if lang not in self.OBLIGATORY_LANGUAGES)
+        return tuple(lang for lang in settings.LANGUAGES if lang not in self.OBLIGATORY_LANGUAGES)
+    OPTIONAL_LANGUAGES = None
 
 app_settings = Settings('MIGDAL')

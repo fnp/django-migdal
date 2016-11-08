@@ -78,16 +78,15 @@ def filtered_entry_admin(typ):
                 for lang_code, lang_name in settings.LANGUAGES
             ]) 
 
-        list_display = translated_fields(('title',),
-                            app_settings.OBLIGATORY_LANGUAGES) + \
-                ('date', 'author') + \
-                _promo_if_necessary + \
-                ('in_stream', 'first_published_at',) + \
-                translated_fields(('published_at',)) + \
-                translated_fields(('needed',), app_settings.OPTIONAL_LANGUAGES)
+        list_display = translated_fields(('title',), app_settings.OBLIGATORY_LANGUAGES) + \
+            ('date', 'author') + \
+            _promo_if_necessary + \
+            ('in_stream', 'first_published_at',) + \
+            translated_fields(('published_at',)) + \
+            translated_fields(('needed',), app_settings.OPTIONAL_LANGUAGES)
         list_filter = _promo_if_necessary + \
-                translated_fields(('published',)) + \
-                translated_fields(('needed',), app_settings.OPTIONAL_LANGUAGES)
+            translated_fields(('published',)) + \
+            translated_fields(('needed',), app_settings.OPTIONAL_LANGUAGES)
         inlines = (AttachmentInline,)
         search_fields = ('title_pl', 'title_en')
     return EntryAdmin

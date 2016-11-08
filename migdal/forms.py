@@ -7,7 +7,7 @@ from django.core.mail import mail_managers
 from django import forms
 from django import template
 from django.utils.translation import ugettext_lazy as _, get_language
-from fnpdjango.utils.text.slughifi import slughifi
+from slugify import slugify
 from migdal.models import Entry
 from migdal import app_settings
 
@@ -18,8 +18,7 @@ def get_submit_form(*args, **kwargs):
     class SubmitForm(forms.ModelForm):
         class Meta:
             model = Entry
-            fields = ['title_%s' % lang, 'lead_%s' % lang,
-                'author', 'author_email', 'categories']
+            fields = ['title_%s' % lang, 'lead_%s' % lang, 'author', 'author_email', 'categories']
             required = ['title_%s' % lang]
 
         def __init__(self, *args, **kwargs):
@@ -34,7 +33,7 @@ def get_submit_form(*args, **kwargs):
         def clean(self):
             data = super(SubmitForm, self).clean()
             data['type'] = app_settings.TYPE_SUBMIT
-            orig_slug = slughifi(data.get('title_%s' % lang, ''))[:47]
+            orig_slug = slugify(data.get('title_%s' % lang, ''))[:47]
             slug = orig_slug
             number = 2
             while Entry.objects.filter(**{'slug_%s' % lang: slug}).exists():
@@ -54,7 +53,8 @@ def get_submit_form(*args, **kwargs):
                 setattr(entry, f, self.cleaned_data[f])
             entry.save()
             entry = super(SubmitForm, self).save(*args, **kwargs)
-            mail_managers(u"Nowy wpis",
+            mail_managers(
+                u"Nowy wpis",
                 template.loader.get_template(
                     'migdal/mail/manager_new_entry.txt').render(
                         template.Context({

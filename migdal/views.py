@@ -45,8 +45,7 @@ def entry_list(request, type_db=None, category_slug=None):
 
     promobox = 5 if entry_type is None and category is None else None
 
-    object_list = api.entry_list(entry_type=entry_type, category=category,
-                    promobox=promobox)
+    object_list = api.entry_list(entry_type=entry_type, category=category, promobox=promobox)
 
     return render(request, templates, {
             'object_list': object_list,
@@ -84,6 +83,7 @@ def submit(request):
             'submit_form': submit_form,
         })
 
+
 def submit_thanks(request):
     return render(request, "migdal/entry/submit_thanks.html")
 
@@ -95,9 +95,10 @@ class SearchPublishedView(SearchView):
     def get_results(self):
         results = super(SearchPublishedView, self).get_results()
         lang_code = get_language()
+
         def is_published(entity):
             if isinstance(entity, Entry):
-                return getattr(entity, "published_%s" % lang_code) == True
+                return getattr(entity, "published_%s" % lang_code)
             else:
                 return True
         results = filter(lambda r: is_published(r.object), results)

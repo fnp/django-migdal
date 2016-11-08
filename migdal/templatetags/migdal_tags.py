@@ -6,8 +6,7 @@ from django_comments_xtd.models import XtdComment
 from django.contrib import comments
 from django import template
 from migdal import app_settings
-from migdal.models import Category, Entry
-from django.utils.translation import ugettext_lazy as _
+from migdal.models import Category
 
 register = template.Library()
 
@@ -57,16 +56,15 @@ def entry_promobox(context, entry, counter):
 def categories(context, taxonomy):
     context = {
         'request': context['request'],
-        'object_list': Category.objects.filter(taxonomy=taxonomy
-                ).exclude(entry__isnull=True)
+        'object_list': Category.objects.filter(taxonomy=taxonomy).exclude(entry__isnull=True)
     }
     return context
 
 
 @register.inclusion_tag('migdal/last_comments.html')
 def last_comments(limit=app_settings.LAST_COMMENTS):
-    return {'object_list': 
-        XtdComment.objects.filter(is_public=True, is_removed=False).order_by('-submit_date')[:limit]}
+    return {
+        'object_list': XtdComment.objects.filter(is_public=True, is_removed=False).order_by('-submit_date')[:limit]}
 
 
 @register.inclusion_tag(['comments/form.html'])

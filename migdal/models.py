@@ -5,22 +5,21 @@
 import re
 from datetime import datetime
 from django.conf import settings
-from django.contrib.comments.signals import comment_will_be_posted
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.mail import mail_managers, send_mail
 from django.db import models
 from django.template import loader, Context
-from django.utils.translation import get_language, ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django_comments_xtd.models import XtdComment
 from markupfield.fields import MarkupField
 from fnpdjango.utils.models.translation import add_translatable, tQ
 from migdal import app_settings
 from migdal.fields import SlugNullField
 
+
 class Category(models.Model):
-    taxonomy = models.CharField(_('taxonomy'), max_length=32,
-                    choices=app_settings.TAXONOMIES)
+    taxonomy = models.CharField(_('taxonomy'), max_length=32, choices=app_settings.TAXONOMIES)
 
     class Meta:
         verbose_name = _('category')
@@ -31,7 +30,7 @@ class Category(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('migdal_category', [self.slug])
+        return 'migdal_category', [self.slug]
 
 
 add_translatable(Category, {
@@ -46,21 +45,24 @@ class PublishedEntryManager(models.Manager):
                 tQ(published=True)
             )
 
+
 class Entry(models.Model):
-    type = models.CharField(max_length=16,
-            choices=((t.db, t.slug) for t in app_settings.TYPES),
-            db_index=True)
+    type = models.CharField(
+        max_length=16,
+        choices=((t.db, t.slug) for t in app_settings.TYPES),
+        db_index=True)
     date = models.DateTimeField(_('created at'), auto_now_add=True, db_index=True)
     changed_at = models.DateTimeField(_('changed at'), auto_now=True, db_index=True)
     author = models.CharField(_('author'), max_length=128)
-    author_email = models.EmailField(_('author email'), max_length=128, null=True, blank=True,
-            help_text=_('Used only to display gravatar and send notifications.'))
+    author_email = models.EmailField(
+        _('author email'), max_length=128, null=True, blank=True,
+        help_text=_('Used only to display gravatar and send notifications.'))
     image = models.ImageField(_('image'), upload_to='entry/image/', null=True, blank=True)
     promo = models.BooleanField(_('promoted'), default=False)
     in_stream = models.BooleanField(_('in stream'), default=True)
     categories = models.ManyToManyField(Category, null=True, blank=True, verbose_name=_('categories'))
     first_published_at = models.DateTimeField(_('published at'), null=True, blank=True)
-    canonical_url = models.URLField(_('canonical link'), null = True, blank = True)
+    canonical_url = models.URLField(_('canonical link'), null=True, blank=True)
 
     objects = models.Manager()
     published_objects = PublishedEntryManager()
@@ -96,7 +98,7 @@ class Entry(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('migdal_entry_%s' % self.type, [self.slug])
+        return 'migdal_entry_%s' % self.type, [self.slug]
 
     def get_type(self):
         return dict(app_settings.TYPES_DICT)[self.type]
@@ -131,10 +133,12 @@ add_translatable(Entry, languages=app_settings.OPTIONAL_LANGUAGES, fields={
 add_translatable(Entry, {
     'slug': SlugNullField(unique=True, db_index=True, null=True, blank=True),
     'title': models.CharField(_('title'), max_length=255, null=True, blank=True),
-    'lead': MarkupField(_('lead'), markup_type='textile_pl', null=True, blank=True,
-                help_text=_('Use <a href="http://textile.thresholdstate.com/">Textile</a> syntax.')),
-    'body': MarkupField(_('body'), markup_type='textile_pl', null=True, blank=True,
-                help_text=_('Use <a href="http://textile.thresholdstate.com/">Textile</a> syntax.')),
+    'lead': MarkupField(
+        _('lead'), markup_type='textile_pl', null=True, blank=True,
+        help_text=_('Use <a href="http://textile.thresholdstate.com/">Textile</a> syntax.')),
+    'body': MarkupField(
+        _('body'), markup_type='textile_pl', null=True, blank=True,
+        help_text=_('Use <a href="http://textile.thresholdstate.com/">Textile</a> syntax.')),
     'published': models.BooleanField(_('published'), default=False),
     'published_at': models.DateTimeField(_('published at'), null=True, blank=True),
 })
@@ -148,10 +152,8 @@ class Attachment(models.Model):
         return self.file.url if self.file else ''
 
 
-
 def notify_new_comment(sender, instance, created, **kwargs):
-    if (created and isinstance(instance.content_object, Entry) and
-                instance.content_object.author_email):
+    if created and isinstance(instance.content_object, Entry) and instance.content_object.author_email:
         site = Site.objects.get_current()
         mail_text = loader.get_template('migdal/mail/new_comment.txt').render(
             Context({
@@ -169,13 +171,15 @@ models.signals.post_save.connect(notify_new_comment, sender=XtdComment)
 def spamfilter(sender, comment, **kwargs):
     """Very simple spam filter. Just don't let any HTML links go through."""
     if re.search(r"<a\s+href=", comment.comment):
-        fields = (comment.user, comment.user_name, comment.user_email,
+        fields = (
+            comment.user, comment.user_name, comment.user_email,
             comment.user_url, comment.submit_date, comment.ip_address,
             comment.followup, comment.comment)
-        mail_managers(u"Spam filter report",
+        mail_managers(
+            u"Spam filter report",
             (u"""This comment was turned down as SPAM: \n""" +
-            """\n%s""" * len(fields) +
-            """\n\nYou don't have to do anything.""") % fields)
+             """\n%s""" * len(fields) +
+             """\n\nYou don't have to do anything.""") % fields)
         return False
     return True
-comment_will_be_posted.connect(spamfilter)
+# comment_will_be_posted.connect(spamfilter)

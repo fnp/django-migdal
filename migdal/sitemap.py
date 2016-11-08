@@ -1,7 +1,12 @@
+# -*- coding: utf-8 -*-
+# This file is part of PrawoKultury, licensed under GNU Affero GPLv3 or later.
+# Copyright © Fundacja Nowoczesna Polska. See NOTICE for more information.
+#
 from django.contrib.sitemaps import Sitemap
 from django.utils.translation import override
 from .models import Entry
 from django.conf import settings
+
 
 class MigdalSitemap(Sitemap):
     changefreq = "never"

@@ -4,15 +4,16 @@
 #
 from django.db import models
 
+
 class SlugNullField(models.SlugField):
     description = "SlugField that stores NULL instead of blank value."
 
-    def to_python(self, value, **kwargs):
-        value = super(SlugNullField, self).to_python(value, **kwargs)
+    def to_python(self, value):
+        value = super(SlugNullField, self).to_python(value)
         return value if value is not None else u""
 
     def get_prep_value(self, value, **kwargs):
-        value = super(SlugNullField, self).get_prep_value(value, **kwargs)
+        value = super(SlugNullField, self).get_prep_value(value)
         return value or None
 
 

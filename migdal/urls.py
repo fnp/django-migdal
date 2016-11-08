@@ -3,7 +3,7 @@
 # Copyright © Fundacja Nowoczesna Polska. See NOTICE for more information.
 #
 from django.conf import settings
-from django.conf.urls import patterns, include, url, handler404
+from django.conf.urls import patterns, url
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import string_concat
 from migdal import feeds, app_settings
@@ -27,13 +27,15 @@ for t in app_settings.TYPES:
     ]
 
 
-urlpatterns = i18n_patterns('',
+urlpatterns = i18n_patterns(
+    '',
     # main page
     url(r'^$', 'migdal.views.main', name='migdal_main'),
     url(r'^rss.xml$', feeds.EntriesFeed(), name='migdal_main_feed'),
     # submit new entry
     url(string_concat(r'^', _('submit'), r'/$'), 'migdal.views.submit', name='migdal_submit'),
-    url(string_concat(r'^', _('submit'), r'/', _('thanks'), r'$'), 'migdal.views.submit_thanks', name='migdal_submit_thanks'),
+    url(string_concat(r'^', _('submit'), r'/', _('thanks'), r'$'), 'migdal.views.submit_thanks',
+        name='migdal_submit_thanks'),
     # category
     url(string_concat(r'^', _('categories'), r'/(?P<category_slug>[^/]*)/$'),
         'migdal.views.entry_list', name='migdal_category'),
@@ -47,9 +49,9 @@ urlpatterns = i18n_patterns('',
 
 if 'django.contrib.sitemaps' in settings.INSTALLED_APPS:
     from .sitemap import sitemaps
-    urlpatterns += patterns('',
+    urlpatterns += patterns(
+        '',
         url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {
             'sitemaps': sitemaps
         }),
     )
-
