@@ -3,7 +3,7 @@
 # Copyright © Fundacja Nowoczesna Polska. See NOTICE for more information.
 #
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import string_concat
 from migdal import feeds, app_settings
@@ -48,10 +48,10 @@ urlpatterns = i18n_patterns(
 
 
 if 'django.contrib.sitemaps' in settings.INSTALLED_APPS:
+    import django.contrib.sitemaps.views
     from .sitemap import sitemaps
-    urlpatterns += patterns(
-        '',
-        url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {
+    urlpatterns += (
+        url(r'^sitemap\.xml$', django.contrib.sitemaps.views.sitemap, {
             'sitemaps': sitemaps
         }),
     )
