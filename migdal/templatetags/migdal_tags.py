@@ -3,7 +3,7 @@
 # Copyright © Fundacja Nowoczesna Polska. See NOTICE for more information.
 #
 from django_comments_xtd.models import XtdComment
-from django.contrib import comments
+import django_comments as comments
 from django import template
 from migdal import app_settings
 from migdal.models import Category
