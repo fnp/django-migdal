@@ -23,9 +23,11 @@ def whole_trees(package_dir, paths):
 
 setup(
     name='django-migdal',
-    version='0.6.4',
+    version='0.7.0',
     author='Radek Czajka',
     author_email='radoslaw.czajka@nowoczesnapolska.org.pl',
+    maintainer='Jan Szejko',
+    maintainer_email='jan.szejko@nowoczesnapolska.org.pl',
     url='',
     packages=find_packages(),
     package_data={'migdal': whole_trees('migdal', ['templates', 'locale'])},

@@ -2,11 +2,12 @@
 # This file is part of PrawoKultury, licensed under GNU Affero GPLv3 or later.
 # Copyright © Fundacja Nowoczesna Polska. See NOTICE for more information.
 #
+from django.shortcuts import get_object_or_404
 from django_comments_xtd.models import XtdComment
 import django_comments as comments
 from django import template
 from migdal import app_settings
-from migdal.models import Category
+from migdal.models import Category, Entry
 
 register = template.Library()
 
@@ -73,3 +74,9 @@ def entry_comment_form(entry):
             'form': comments.get_form()(entry),
             'next': entry.get_absolute_url(),
         }
+
+
+@register.simple_tag
+def entry_url(slug, lang='pl'):
+    entry = get_object_or_404(Entry, **{'slug_%s' % lang: slug})
+    return entry.get_absolute_url()
