@@ -23,7 +23,7 @@ def whole_trees(package_dir, paths):
 
 setup(
     name='django-migdal',
-    version='0.7.1',
+    version='0.7.2',
     author='Radek Czajka',
     author_email='radoslaw.czajka@nowoczesnapolska.org.pl',
     maintainer='Jan Szejko',
@@ -34,4 +34,12 @@ setup(
     license='LICENSE',
     description='.',
     long_description="",
+    install_requires=[
+        'django-contrib-comments',
+        'django-comments-xtd',
+        'django-gravatar',
+        'django-haystack',
+        'django-markupfield',
+        'python-slugify',
+    ],
 )
