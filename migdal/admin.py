@@ -18,7 +18,7 @@ class AttachmentInline(admin.TabularInline):
 
 def filtered_entry_admin(typ):
     class EntryAdmin(admin.ModelAdmin):
-        def queryset(self, request):
+        def get_queryset(self, request):
             return self.model.objects.filter(type=typ.db)
 
         def has_add_permission(self, request):
