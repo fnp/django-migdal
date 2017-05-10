@@ -37,8 +37,9 @@ def filtered_entry_admin(typ):
             return field
 
         date_hierarchy = 'date'
-        readonly_fields = ('date', 'changed_at', 'first_published_at') + \
-            translated_fields(('published_at',))
+        readonly_fields = ('date', 'changed_at') + translated_fields(('published_at',))
+        if app_settings.PUBLISH_DATE_EDITABLE:
+            readonly_fields += ('first_published_at',)
         _promo_if_necessary = ('promo',) if typ.promotable else ()
 
         fieldsets = (

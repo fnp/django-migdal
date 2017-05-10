@@ -47,4 +47,6 @@ class Settings(AppSettings):
         return tuple(lang for lang in settings.LANGUAGES if lang not in self.OBLIGATORY_LANGUAGES)
     OPTIONAL_LANGUAGES = None
 
+    PUBLISH_DATE_EDITABLE = False
+
 app_settings = Settings('MIGDAL')

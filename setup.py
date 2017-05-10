@@ -23,7 +23,7 @@ def whole_trees(package_dir, paths):
 
 setup(
     name='django-migdal',
-    version='0.7.3',
+    version='0.7.4',
     author='Radek Czajka',
     author_email='radoslaw.czajka@nowoczesnapolska.org.pl',
     maintainer='Jan Szejko',
