@@ -16,6 +16,12 @@ class EntryIndex(indexes.SearchIndex, indexes.Indexable):
     date = indexes.DateTimeField(indexed=True, model_attr="date")
     author = indexes.CharField(model_attr="author")
 
+    def prepare_date(self, obj):
+        date = u''
+        if 'date' in self.prepared_data:
+            date = self.prepared_data['date'].strftime('%Y-%m-%dT%H:%M:%SZ')
+        return date
+
     def get_model(self):
         return Entry
 
