@@ -26,3 +26,7 @@ thumbs.db
 # Tags file
 TAGS
 
+# testing
+migdal_site
+db.sqlite3
+manage.py
