@@ -12,7 +12,7 @@ from django.db import models
 from django.template import loader, Context
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django_comments_xtd.models import XtdComment
-from markupfield.fields import MarkupField
+from fnpdjango.utils.fields import TextileField
 from fnpdjango.utils.models.translation import add_translatable, tQ
 from migdal import app_settings
 from migdal.fields import SlugNullField
@@ -46,6 +46,18 @@ class PublishedEntryManager(models.Manager):
             )
 
 
+class PhotoGallery(models.Model):
+    key = models.CharField(max_length=64)
+
+    def __unicode__(self):
+        return self.key
+
+
+class Photo(models.Model):
+    gallery = models.ForeignKey(PhotoGallery)
+    image = models.ImageField(_('image'), upload_to='entry/photo/', null=True, blank=True)
+
+
 class Entry(models.Model):
     type = models.CharField(
         max_length=16,
@@ -63,6 +75,7 @@ class Entry(models.Model):
     categories = models.ManyToManyField(Category, blank=True, verbose_name=_('categories'))
     first_published_at = models.DateTimeField(_('published at'), null=True, blank=True)
     canonical_url = models.URLField(_('canonical link'), null=True, blank=True)
+    gallery = models.ForeignKey(PhotoGallery, null=True, blank=True)
 
     objects = models.Manager()
     published_objects = PublishedEntryManager()
@@ -130,15 +143,17 @@ add_translatable(Entry, languages=app_settings.OPTIONAL_LANGUAGES, fields={
                 default='n'),
 })
 
+TEXTILE_HELP = _('Use <a href="https://txstyle.org/article/44/an-overview-of-the-textile-syntax">Textile</a> syntax.')
+
 add_translatable(Entry, {
     'slug': SlugNullField(unique=True, db_index=True, null=True, blank=True),
     'title': models.CharField(_('title'), max_length=255, null=True, blank=True),
-    'lead': MarkupField(
-        _('lead'), markup_type='textile_pl', null=True, blank=True,
-        help_text=_('Use <a href="http://textile.thresholdstate.com/">Textile</a> syntax.')),
-    'body': MarkupField(
-        _('body'), markup_type='textile_pl', null=True, blank=True,
-        help_text=_('Use <a href="http://textile.thresholdstate.com/">Textile</a> syntax.')),
+    'lead': TextileField(
+        _('lead'), markup_type='textile_pl', null=True, blank=True, help_text=TEXTILE_HELP),
+    'body': TextileField(
+        _('body'), markup_type='textile_pl', null=True, blank=True, help_text=TEXTILE_HELP),
+    'place': models.CharField(_('place'), null=True, blank=True, max_length=256),
+    'time': models.CharField(_('time'), null=True, blank=True, max_length=256),
     'published': models.BooleanField(_('published'), default=False),
     'published_at': models.DateTimeField(_('published at'), null=True, blank=True),
 })

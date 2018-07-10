@@ -17,6 +17,7 @@ class Settings(AppSettings):
             EntryType('news', _('news'), commentable=True, on_main=True, promotable=True),
             EntryType('publications', _('publications')),
             EntryType('info', _('info')),
+            EntryType('event', _('events')),
         )
     TYPE_SUBMIT = 'news'
     TAXONOMIES = (

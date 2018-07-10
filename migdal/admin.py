@@ -46,7 +46,7 @@ def filtered_entry_admin(typ):
             (None, {
                 'fields': _promo_if_necessary + (
                     'in_stream', 'author', 'author_email', 'canonical_url', 'image',
-                    'date', 'first_published_at', 'changed_at')
+                    'date', 'first_published_at', 'changed_at', 'gallery')
                 }),
         ) + tuple(
             (ln, {'fields': (
@@ -56,6 +56,8 @@ def filtered_entry_admin(typ):
                 'slug_%s' % lc,
                 'lead_%s' % lc,
                 'body_%s' % lc,
+                'place_%s' % lc,
+                'time_%s' % lc,
                 )})
             for lc, ln in app_settings.OBLIGATORY_LANGUAGES
         ) + tuple(
@@ -66,6 +68,8 @@ def filtered_entry_admin(typ):
                 'slug_%s' % lc,
                 'lead_%s' % lc,
                 'body_%s' % lc,
+                'place_%s' % lc,
+                'time_%s' % lc,
                 )})
             for lc, ln in app_settings.OPTIONAL_LANGUAGES
         )
