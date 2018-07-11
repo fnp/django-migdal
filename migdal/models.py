@@ -46,18 +46,6 @@ class PublishedEntryManager(models.Manager):
             )
 
 
-class PhotoGallery(models.Model):
-    key = models.CharField(max_length=64)
-
-    def __unicode__(self):
-        return self.key
-
-
-class Photo(models.Model):
-    gallery = models.ForeignKey(PhotoGallery)
-    image = models.ImageField(_('image'), upload_to='entry/photo/', null=True, blank=True)
-
-
 class Entry(models.Model):
     type = models.CharField(
         max_length=16,
@@ -75,7 +63,6 @@ class Entry(models.Model):
     categories = models.ManyToManyField(Category, blank=True, verbose_name=_('categories'))
     first_published_at = models.DateTimeField(_('published at'), null=True, blank=True)
     canonical_url = models.URLField(_('canonical link'), null=True, blank=True)
-    gallery = models.ForeignKey(PhotoGallery, null=True, blank=True)
 
     objects = models.Manager()
     published_objects = PublishedEntryManager()
@@ -165,6 +152,14 @@ class Attachment(models.Model):
 
     def url(self):
         return self.file.url if self.file else ''
+
+
+class Photo(models.Model):
+    image = models.ImageField(_('image'), upload_to='entry/photo/')
+    entry = models.ForeignKey(Entry)
+
+    def url(self):
+        return self.image.url if self.image else ''
 
 
 def notify_new_comment(sender, instance, created, **kwargs):
