@@ -40,8 +40,8 @@ add_translatable(Category, {
 
 
 class PublishedEntryManager(models.Manager):
-    def get_query_set(self):
-        return super(PublishedEntryManager, self).get_query_set().filter(
+    def get_queryset(self):
+        return super(PublishedEntryManager, self).get_queryset().filter(
                 tQ(published=True)
             )
 
