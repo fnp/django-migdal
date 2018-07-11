@@ -5,7 +5,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from migdal.models import Entry, Attachment
+from migdal.models import Entry, Attachment, Photo
 from migdal import app_settings
 from fnpdjango.utils.models import filtered_model
 from fnpdjango.utils.models.translation import translated_fields
@@ -13,6 +13,11 @@ from fnpdjango.utils.models.translation import translated_fields
 
 class AttachmentInline(admin.TabularInline):
     model = Attachment
+    readonly_fields = ['url']
+
+
+class PhotoInline(admin.TabularInline):
+    model = Photo
     readonly_fields = ['url']
 
 
@@ -46,7 +51,7 @@ def filtered_entry_admin(typ):
             (None, {
                 'fields': _promo_if_necessary + (
                     'in_stream', 'author', 'author_email', 'canonical_url', 'image',
-                    'date', 'first_published_at', 'changed_at', 'gallery')
+                    'date', 'first_published_at', 'changed_at')
                 }),
         ) + tuple(
             (ln, {'fields': (
@@ -92,7 +97,7 @@ def filtered_entry_admin(typ):
         list_filter = _promo_if_necessary + \
             translated_fields(('published',)) + \
             translated_fields(('needed',), app_settings.OPTIONAL_LANGUAGES)
-        inlines = (AttachmentInline,)
+        inlines = (PhotoInline, AttachmentInline)
         search_fields = ('title_pl', 'title_en')
     return EntryAdmin
 
