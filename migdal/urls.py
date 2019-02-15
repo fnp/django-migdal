@@ -28,7 +28,6 @@ for t in app_settings.TYPES:
 
 
 urlpatterns = i18n_patterns(
-    '',
     # main page
     url(r'^$', 'migdal.views.main', name='migdal_main'),
     url(r'^rss.xml$', feeds.EntriesFeed(), name='migdal_main_feed'),
