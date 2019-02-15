@@ -33,7 +33,7 @@ class Category(models.Model):
         return 'migdal_category', [self.slug]
 
 
-add_translatable(Category, {
+add_translatable(Category, languages=app_settings.LANGUAGES, fields={
     'title': models.CharField(max_length=64, unique=True, db_index=True),
     'slug': models.SlugField(unique=True, db_index=True),
 })
@@ -77,7 +77,7 @@ class Entry(models.Model):
 
     def save(self, *args, **kwargs):
         published_now = False
-        for lc, ln in settings.LANGUAGES:
+        for lc, ln in app_settings.LANGUAGES:
             if (getattr(self, "published_%s" % lc)
                     and getattr(self, "published_at_%s" % lc) is None):
                 now = datetime.now()
@@ -90,7 +90,7 @@ class Entry(models.Model):
             self.notify_author_published()
 
     def clean(self):
-        for lc, ln in settings.LANGUAGES:
+        for lc, ln in app_settings.LANGUAGES:
             if (getattr(self, "published_%s" % lc) and
                     not getattr(self, "slug_%s" % lc)):
                 raise ValidationError(
@@ -132,7 +132,7 @@ add_translatable(Entry, languages=app_settings.OPTIONAL_LANGUAGES, fields={
 
 TEXTILE_HELP = _('Use <a href="https://txstyle.org/article/44/an-overview-of-the-textile-syntax">Textile</a> syntax.')
 
-add_translatable(Entry, {
+add_translatable(Entry, languages=app_settings.LANGUAGES, fields={
     'slug': SlugNullField(unique=True, db_index=True, null=True, blank=True),
     'title': models.CharField(_('title'), max_length=255, null=True, blank=True),
     'lead': TextileField(

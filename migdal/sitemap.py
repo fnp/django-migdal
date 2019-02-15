@@ -4,8 +4,8 @@
 #
 from django.contrib.sitemaps import Sitemap
 from django.utils.translation import override
+from . import app_settings
 from .models import Entry
-from django.conf import settings
 
 
 class MigdalSitemap(Sitemap):
@@ -27,5 +27,5 @@ class MigdalSitemap(Sitemap):
 
 
 sitemaps = {}
-for lc, ln in settings.LANGUAGES:
+for lc, ln in app_settings.LANGUAGES:
     sitemaps['entry_%s' % lc] = MigdalSitemap(lc)

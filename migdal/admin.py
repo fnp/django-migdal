@@ -42,7 +42,7 @@ def filtered_entry_admin(typ):
             return field
 
         date_hierarchy = 'date'
-        readonly_fields = ('date', 'changed_at') + translated_fields(('published_at',))
+        readonly_fields = ('date', 'changed_at') + translated_fields(('published_at',), app_settings.LANGUAGES)
         if app_settings.PUBLISH_DATE_EDITABLE:
             readonly_fields += ('first_published_at',)
         _promo_if_necessary = ('promo',) if typ.promotable else ()
@@ -85,17 +85,17 @@ def filtered_entry_admin(typ):
             )
         prepopulated_fields = dict([
                 ("slug_%s" % lang_code, ("title_%s" % lang_code,))
-                for lang_code, lang_name in settings.LANGUAGES
+                for lang_code, lang_name in app_settings.LANGUAGES
             ]) 
 
         list_display = translated_fields(('title',), app_settings.OBLIGATORY_LANGUAGES) + \
             ('date', 'author') + \
             _promo_if_necessary + \
             ('in_stream', 'first_published_at',) + \
-            translated_fields(('published_at',)) + \
+            translated_fields(('published_at',), app_settings.LANGUAGES) + \
             translated_fields(('needed',), app_settings.OPTIONAL_LANGUAGES)
         list_filter = _promo_if_necessary + \
-            translated_fields(('published',)) + \
+            translated_fields(('published',), app_settings.LANGUAGES) + \
             translated_fields(('needed',), app_settings.OPTIONAL_LANGUAGES)
         inlines = (PhotoInline, AttachmentInline)
         search_fields = ('title_pl', 'title_en')
@@ -111,9 +111,9 @@ if app_settings.TAXONOMIES:
     from migdal.models import Category
 
     class CategoryAdmin(admin.ModelAdmin):
-        list_display = translated_fields(('title', 'slug')) + ('taxonomy',)
+        list_display = translated_fields(('title', 'slug'), app_settings.LANGUAGES) + ('taxonomy',)
         prepopulated_fields = dict([
                 ("slug_%s" % lang_code, ("title_%s" % lang_code,))
-                for lang_code, lang_name in settings.LANGUAGES
+                for lang_code, lang_name in app_settings.LANGUAGES
             ]) 
     admin.site.register(Category, CategoryAdmin)
