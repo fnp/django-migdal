@@ -45,8 +45,15 @@ class Settings(AppSettings):
     OBLIGATORY_LANGUAGES = None
 
     def _more_OPTIONAL_LANGUAGES(self, value):
-        return tuple(lang for lang in settings.LANGUAGES if lang not in self.OBLIGATORY_LANGUAGES)
+        if value is None:
+            return tuple(lang for lang in settings.LANGUAGES if lang not in self.OBLIGATORY_LANGUAGES)
+        else:
+            return value
     OPTIONAL_LANGUAGES = None
+
+    def _more_LANGUAGES(self, value):
+        return self.OBLIGATORY_LANGUAGES + self.OPTIONAL_LANGUAGES
+    LANGUAGES = None
 
     PUBLISH_DATE_EDITABLE = False
 
