@@ -102,5 +102,4 @@ class SearchPublishedView(SearchView):
             else:
                 return True
         results = filter(lambda r: is_published(r.object), results)
-        print results
         return results

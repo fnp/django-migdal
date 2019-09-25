@@ -5,11 +5,20 @@
 from django.shortcuts import get_object_or_404
 from django_comments_xtd.models import XtdComment
 import django_comments as comments
+import django
 from django import template
 from migdal import app_settings
 from migdal.models import Category, Entry
 
 register = template.Library()
+
+
+if django.VERSION < (1, 8):
+    # See https://docs.djangoproject.com/en/2.2/releases/1.8/#rendering-templates-loaded-by-get-template-with-a-context
+    context_for_get_template = template.Context
+else:
+    context_for_get_template = lambda x: x
+
 
 
 @register.simple_tag(takes_context=True)
@@ -23,7 +32,7 @@ def entry_begin(context, entry, detail=False):
         'object': entry,
         'detail': detail,
     }
-    return t.render(template.Context(context))
+    return t.render(context_for_get_template(context))
 
 
 @register.simple_tag(takes_context=True)
@@ -36,7 +45,7 @@ def entry_short(context, entry):
         'request': context['request'],
         'object': entry,
     }
-    return t.render(template.Context(context))
+    return t.render(context_for_get_template(context))
 
 
 @register.simple_tag(takes_context=True)
@@ -50,7 +59,7 @@ def entry_promobox(context, entry, counter):
         'object': entry,
         'counter': counter,
     }
-    return t.render(template.Context(context))
+    return t.render(context_for_get_template(context))
 
 
 @register.inclusion_tag('migdal/categories.html', takes_context=True)
