@@ -17,7 +17,7 @@
 
 {% autopaginate object_list 10 as page %}
 
-{% if object_list.promobox and page.number == 1 %}
+{% if object_list.promobox and page_obj.number == 1 %}
 <div id="promobox">
 <ul id="promobox-switcher">
 {% for object in object_list.promobox %}
