@@ -15,7 +15,9 @@
     <h1>{{ entry_type|capfirst }}</h1>
 {% endif %}
 
-{% if object_list.promobox and request.page == 1 %}
+{% autopaginate object_list 10 as page %}
+
+{% if object_list.promobox and page.number == 1 %}
 <div id="promobox">
 <ul id="promobox-switcher">
 {% for object in object_list.promobox %}
@@ -47,8 +49,7 @@
    <p class="warning">{% trans "Work in progress." %}</p>
 {% endif %}
 
-{% autopaginate object_list 10 %}
-{% for object in object_list %}
+{% for object in page %}
     {% entry_short object %}
 {% endfor %}
 {% prevnext %}
